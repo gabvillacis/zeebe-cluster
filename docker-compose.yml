@@ -11,7 +11,7 @@ volumes:
   zeebe_elasticsearch_data: {}
 
 services:  
-  zeebe_node0:
+  zeebe-node0:
     container_name: zeebe-broker1
     image: camunda/zeebe:0.25.1
     environment:
@@ -20,7 +20,7 @@ services:
       - ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT=3
       - ZEEBE_BROKER_CLUSTER_REPLICATIONFACTOR=3
       - ZEEBE_BROKER_CLUSTER_CLUSTERSIZE=3
-      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe_node0:26502
+      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe-node0:26502
       - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME=io.zeebe.exporter.ElasticsearchExporter
       - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch:9200
     networks:
@@ -30,7 +30,7 @@ services:
     depends_on:
       - elasticsearch
     restart: always
-  zeebe_node1:
+  zeebe-node1:
     container_name: zeebe-broker2
     image: camunda/zeebe:0.25.1
     environment:
@@ -39,7 +39,7 @@ services:
       - ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT=3
       - ZEEBE_BROKER_CLUSTER_REPLICATIONFACTOR=3
       - ZEEBE_BROKER_CLUSTER_CLUSTERSIZE=3
-      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe_node0:26502
+      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe-node0:26502
       - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME=io.zeebe.exporter.ElasticsearchExporter
       - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch:9200
     networks:
@@ -48,9 +48,9 @@ services:
       - zeebe_broker2_data:/usr/local/zeebe/data      
     depends_on:
       - elasticsearch
-      - zeebe_node0
+      - zeebe-node0
     restart: always
-  zeebe_node2:
+  zeebe-node2:
     container_name: zeebe-broker3
     image: camunda/zeebe:0.25.1
     environment:
@@ -59,7 +59,7 @@ services:
       - ZEEBE_BROKER_CLUSTER_PARTITIONSCOUNT=3
       - ZEEBE_BROKER_CLUSTER_REPLICATIONFACTOR=3
       - ZEEBE_BROKER_CLUSTER_CLUSTERSIZE=3
-      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe_node0:26502
+      - ZEEBE_BROKER_CLUSTER_INITIALCONTACTPOINTS=zeebe-node0:26502
       - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME=io.zeebe.exporter.ElasticsearchExporter
       - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch:9200
     networks:
@@ -68,9 +68,9 @@ services:
       - zeebe_broker3_data:/usr/local/zeebe/data
     depends_on:
       - elasticsearch
-      - zeebe_node0
+      - zeebe-node0
     restart: always
-  zeebe_gateway:
+  zeebe-gateway:
     container_name: zeebe-gateway
     image: camunda/zeebe:0.25.1
     environment:
@@ -78,15 +78,15 @@ services:
       - ZEEBE_STANDALONE_GATEWAY=true
       - ZEEBE_GATEWAY_NETWORK_HOST=0.0.0.0
       - ZEEBE_GATEWAY_NETWORK_PORT=26500
-      - ZEEBE_GATEWAY_CLUSTER_CONTACTPOINT=zeebe_node0:26502
-      - ZEEBE_GATEWAY_CLUSTER_HOST=zeebe_gateway
+      - ZEEBE_GATEWAY_CLUSTER_CONTACTPOINT=zeebe-node0:26502
+      - ZEEBE_GATEWAY_CLUSTER_HOST=zeebe-gateway
       - ZEEBE_GATEWAY_CLUSTER_PORT=26502      
     ports:
       - "26500:26500"      
     networks:
       - zeebe_network
     depends_on:
-      - zeebe_node0
+      - zeebe-node0
     restart: always
   elasticsearch:
     container_name: elasticsearch
@@ -107,10 +107,10 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - zeebe_node0
-      - zeebe_node1
-      - zeebe_node2
-      - zeebe_gateway
+      - zeebe-node0
+      - zeebe-node1
+      - zeebe-node2
+      - zeebe-gateway
       - elasticsearch
     volumes:
       - ./operate-config.yml:/usr/local/operate/config/application.yml
